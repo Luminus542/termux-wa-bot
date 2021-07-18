@@ -1,0 +1,12 @@
+{
+  "name": "termux-wa-bot",
+  "version": "0.0.0",
+  "description": "no comentada",
+  "main": "lxbot.js",
+  "scripts": {
+  "start": "node lxbot.js"
+  },
+  "dependencies": {
+    "@adiwajshing/baileys": "^3.4.1"
+  }
+}
