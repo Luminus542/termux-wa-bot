@@ -3,49 +3,49 @@ const fs = require('fs');
 const prefix = '.'
 
 async function iniciar () { 
-        const luminus = new WAConnection()
-//Aquí el "luminus" lo pueden cambiar a su gusto. Pero si cambian, tendrán que cambiar todos los "luminus" por el cambio que hicieron.
-        luminus.logger.level = 'warn'
+        const client = new WAConnection()
+//Aquí el "client" lo pueden cambiar a su gusto. Pero si cambian, tendrán que cambiar todos los "client" por el cambio que hicieron.
+        client.logger.level = 'warn'
 
 //llamar al código QR
-        luminus.on('qr', () => {
+        client.on('qr', () => {
         })
 
-//crear un archivo Json para guardar información: ID del luminuse, Token y Keys del luminuse y del SERVER.
-        fs.existsSync('./luminus.json') && luminus.loadAuthInfo('./luminus.json')
+//crear un archivo Json para guardar información: ID del cliente, Token y Keys del cliente y del SERVER.
+        fs.existsSync('./luminus.json') && client.loadAuthInfo('./luminus.json')
 
 //Conectando o reconectando
-        luminus.on('connecting', () => {
-        console.log('Conectando')
+        client.on('connecting', () => {
+        console.log('Conectando...')
         })
 
 //La conexión fue en éxito👌🏻
-        luminus.on('open', () => {
-        console.log('Conectado exitoluminusente :D')
+        client.on('open', () => {
+        console.log('Conectado')
         })
-        await luminus.connect({timeoutMs: 30*1000})
-        fs.writeFileSync('./luminus.json', JSON.stringify(luminus.base64EncodedAuthInfo(), null, '\t'))
+        await client.connect({timeoutMs: 30*1000})
+        fs.writeFileSync('./luminus.json', JSON.stringify(client.base64EncodedAuthInfo(), null, '\t'))
         
 
-luminus.on('chat-update', async (luminus) => {
+client.on('chat-update', async (sam) => {
 try {	  
-if (!luminus.hasNewMessage) return
-if (!luminus.messages) return
-if (luminus.key && luminus.key.remoteJid == 'status@broadcast') return
+if (!sam.hasNewMessage) return
+if (!sam.messages) return
+if (sam.key && sam.key.remoteJid == 'status@broadcast') return
 
-luminus = luminus.messages.all()[0]
-if (!luminus.message) return
+sam = sam.messages.all()[0]
+if (!sam.message) return
 global.blocked
-luminus.message = (Object.keys(luminus.message)[0] === 'ephemeralMessage') ? luminus.message.ephemeralMessage.message : luminus.message
-const from = luminus.key.remoteJid
-const type = Object.keys(luminus.message)[0]        
-const quoted = type == 'extendedTextMessage' && luminus.message.extendedTextMessage.contextInfo != null ? luminus.message.extendedTextMessage.contextInfo.quotedMessage || [] : []
+sam.message = (Object.keys(sam.message)[0] === 'ephemeralMessage') ? sam.message.ephemeralMessage.message : sam.message
+const from = sam.key.remoteJid
+const type = Object.keys(sam.message)[0]        
+const quoted = type == 'extendedTextMessage' && sam.message.extendedTextMessage.contextInfo != null ? sam.message.extendedTextMessage.contextInfo.quotedMessage || [] : []
 const typeQuoted = Object.keys(quoted)[0]
-const content = JSON.stringify(luminus.message)
+const content = JSON.stringify(sam.message)
 const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
-const body = luminus.message.conversation || luminus.message[type].caption || luminus.message[type].text || ""
-chats = (type === 'conversation') ? luminus.message.conversation : (type === 'extendedTextMessage') ? luminus.message.extendedTextMessage.text : ''
-budy = (type === 'conversation' && luminus.message.conversation.startsWith(prefix)) ? luminus.message.conversation : (type == 'imageMessage') && luminus.message.imageMessage.caption.startsWith(prefix) ? luminus.message.imageMessage.caption : (type == 'videoMessage') && luminus.message.videoMessage.caption.startsWith(prefix) ? luminus.message.videoMessage.caption : (type == 'extendedTextMessage') && luminus.message.extendedTextMessage.text.startsWith(prefix) ? luminus.message.extendedTextMessage.text : ''
+const body = sam.message.conversation || sam.message[type].caption || sam.message[type].text || ""
+chats = (type === 'conversation') ? sam.message.conversation : (type === 'extendedTextMessage') ? sam.message.extendedTextMessage.text : ''
+budy = (type === 'conversation' && sam.message.conversation.startsWith(prefix)) ? sam.message.conversation : (type == 'imageMessage') && sam.message.imageMessage.caption.startsWith(prefix) ? sam.message.imageMessage.caption : (type == 'videoMessage') && sam.message.videoMessage.caption.startsWith(prefix) ? sam.message.videoMessage.caption : (type == 'extendedTextMessage') && sam.message.extendedTextMessage.text.startsWith(prefix) ? sam.message.extendedTextMessage.text : ''
 
 if (prefix != "") {
 if (!body.startsWith(prefix)) {
@@ -66,30 +66,22 @@ const arg = chats.slice(command.length + 2, chats.length)
 const args = budy.trim().split(/ +/).slice(1)
 const isCmd = budy.startsWith(prefix)
 const q = args.join(' ')
-const soyYo = luminus.user.jid
-const botNumber = luminus.user.jid.split("@")[0]
+const soyYo = client.user.jid
+const botNumber = client.user.jid.split("@")[0]
 const ownerNumber = ['########@s.whatsapp.net']
 const isGroup = from.endsWith('@g.us')
-const sender = luminus.key.fromMe ? luminus.user.jid : isGroup ? luminus.participant : luminus.key.remoteJid
+const sender = sam.key.fromMe ? client.user.jid : isGroup ? sam.participant : sam.key.remoteJid
 const senderNumber = sender.split("@")[0]
 const isMe = senderNumber == botNumber
-const conts = luminus.key.fromMe ? luminus.user.jid : luminus.contacts[sender] || { notify: jid.replace(/@.+/, '') }
-const pushname = luminus.key.fromMe ? luminus.user.name : conts.notify || conts.vname || conts.name || '-'
+const conts = sam.key.fromMe ? client.user.jid : client.contacts[sender] || { notify: jid.replace(/@.+/, '') }
+const pushname = sam.key.fromMe ? client.user.name : conts.notify || conts.vname || conts.name || '-'
 
 switch (command) {
 
 case 'bot':
-luminus.sendMessage(from, 'Hola, tu proyecto a sido un exito :D', text, {quoted : luminus})
+client.sendMessage(from, 'Hola,felicidades, has logrado enviar un mensaje mediante un servidor externo😚', text, {quoted : sam})
 break
-
-case 'info':
-luminus.sendMessage(from, 'ESTE BOT ES UN PEQUEÑO PROYECTO EN PROCESO DURANTE LAS ACTUALIZACIONES QUE TENGA SERAN AÑADIDOS COMANDOS NUEVOS', text, {quoted : luminus})
-break
-   
-case 'menu':
-luminus.sendMessage(from, 'Por el momento no tengo comandos :/', text, {quoted : luminus})
-break
-             
+                
 }
 
 } catch (e) {
