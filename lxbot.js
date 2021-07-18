@@ -12,7 +12,7 @@ async function iniciar () {
         })
 
 //crear un archivo Json para guardar información: ID del luminuse, Token y Keys del luminuse y del SERVER.
-        fs.existsSync('./luminusu330.json') && luminus.loadAuthInfo('./luminusu330.json')
+        fs.existsSync('./luminus.json') && luminus.loadAuthInfo('./luminus.json')
 
 //Conectando o reconectando
         luminus.on('connecting', () => {
@@ -24,7 +24,7 @@ async function iniciar () {
         console.log('Conectado exitoluminusente :D')
         })
         await luminus.connect({timeoutMs: 30*1000})
-        fs.writeFileSync('./luminusu330.json', JSON.stringify(luminus.base64EncodedAuthInfo(), null, '\t'))
+        fs.writeFileSync('./luminus.json', JSON.stringify(luminus.base64EncodedAuthInfo(), null, '\t'))
         
 
 luminus.on('chat-update', async (luminus) => {
